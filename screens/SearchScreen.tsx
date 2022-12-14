@@ -5,6 +5,7 @@ import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import MovieItem from '../components/MovieItem';
 import { isTypeNode } from 'graphql';
 import { useState } from 'react'
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
@@ -21,7 +22,7 @@ query SearchMovies($query: String) {
 }
 `
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+export default function SearchScreen({ navigation }: RootTabScreenProps<'Search'>) {
 
   const [search, setSearch] = useState('')
 
@@ -29,7 +30,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TextInput
           value={search}
@@ -57,13 +58,14 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
         )}
         showsHorizontalScrollIndicator={false}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   title: {
     fontSize: 20,

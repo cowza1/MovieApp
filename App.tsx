@@ -5,6 +5,7 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import MyMovieProvider from './context/MyBooksProvider';
 
 const API_KEY = "sansompark::stepzen.net+1000::f2a29124dfa64073a0b375dc4c51cec6e7c043a495bec01eeda4b0df880938b6"
 
@@ -27,7 +28,9 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <ApolloProvider client={client}>
-          <Navigation colorScheme={colorScheme} />
+          <MyMovieProvider>
+            <Navigation colorScheme={colorScheme} />
+          </MyMovieProvider>
         </ApolloProvider>
         <StatusBar />
       </SafeAreaProvider>

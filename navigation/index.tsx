@@ -14,10 +14,14 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import SearchScreen from '../screens/SearchScreen';
-import BookmarkScreen from '../screens/BookmarkScreen';
+import SearchScreen from '../screens/search/SearchScreen';
+import BookmarkScreen from '../screens/bookmark/BookmarkScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import HomeScreen from "../screens/HomeScreen";
+import LoginScreen from "../screens/auth/LoginScreen";
+import RegisterScreen from "../screens/auth/RegisterScreen";
+
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -38,6 +42,9 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home', headerShown: false }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login', headerShown: false }} />
+      <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register', headerShown: false }} />
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>

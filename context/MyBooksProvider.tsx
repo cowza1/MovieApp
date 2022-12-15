@@ -1,5 +1,8 @@
 import { useEffect, createContext, useContext, ReactNode, useState, BlockquoteHTMLAttributes } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { auth } from "../firebase/firebaseConfig.js"
+import { onAuthStateChanged } from "firebase/auth";
+
 
 type MyMoviesContextType = {
   onToggleSaved: (movie: Movie) => void;
@@ -31,22 +34,10 @@ const MyMovieProvider = ({ children }: Props) => {
     }
   }, [savedMovies]);
 
+
   const areMoviesTheSame = (a: Movie, b: Movie) => {
     return JSON.stringify(a) === JSON.stringify(b);
   };
-
-  const persistData = async () => {
-    await AsyncStorage.setItem('MovieData', JSON.stringify(savedMovies));
-  };
-
-  const loadData = async () => {
-    const dataString = await AsyncStorage.getItem('moviesData');
-    if (dataString) {
-      const items = JSON.parse(dataString);
-      setSavedMovies(items);
-    }
-    setLoaded(true)
-  }
 
   const isMovieSaved = (movie: Movie) => {
     return savedMovies.some((savedMovie) => areMoviesTheSame(savedMovie, movie));
@@ -60,6 +51,21 @@ const MyMovieProvider = ({ children }: Props) => {
       setSavedMovies((movies) => [movie, ...movies])
     }
   };
+
+  const persistData = async () => {
+    await AsyncStorage.setItem('moviesData', JSON.stringify(savedMovies));
+  };
+
+
+  const loadData = async () => {
+    const dataString = await AsyncStorage.getItem('moviesData');
+    if (dataString) {
+      const items = JSON.parse(dataString);
+      setSavedMovies(items);
+    }
+    setLoaded(true)
+  }
+
 
 
   return (

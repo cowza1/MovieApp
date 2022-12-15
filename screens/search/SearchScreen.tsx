@@ -1,12 +1,12 @@
-import { Button, FlatList, StyleSheet, TextInput } from 'react-native';
-import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
+import { Button, FlatList, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, View } from '../../components/Themed';
+import { RootTabScreenProps } from '../../types';
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
-import MovieItem from '../components/MovieItem';
+import MovieItem from '../../components/MovieItem';
 import { isTypeNode } from 'graphql';
 import { useState } from 'react'
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { auth } from "../../firebase/firebaseConfig.js"
 
 
 const query = gql`
@@ -24,6 +24,16 @@ query SearchMovies($query: String) {
 
 export default function SearchScreen({ navigation }: RootTabScreenProps<'Search'>) {
 
+
+  const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.navigate("Home")
+      })
+      .catch(error => alert(error.message))
+  }
+
   const [search, setSearch] = useState('')
 
   const [runQuery, { data, loading, error }] = useLazyQuery(query)
@@ -31,6 +41,15 @@ export default function SearchScreen({ navigation }: RootTabScreenProps<'Search'
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.btnContainer}>
+        <TouchableOpacity
+          onPress={handleSignOut}
+          style={styles.button}>
+
+          <Text style={styles.buttonText}>Sign Out</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.header}>
         <TextInput
           value={search}
@@ -40,9 +59,14 @@ export default function SearchScreen({ navigation }: RootTabScreenProps<'Search'
         />
         <Button
           title='search'
+          color='black'
           onPress={() => runQuery({ variables: { query: search } })}
         />
       </View>
+      {loading && <ActivityIndicator />}
+      {error &&
+        <Text>Error Fetching Data</Text>
+      }
       <FlatList
         data={data?.myQuery?.results || []}
 
@@ -80,6 +104,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 10,
+    backgroundColor: 'white',
   },
   input: {
     flex: 1,
@@ -89,5 +114,23 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     backgroundColor: "beige",
     borderRadius: 20,
+  },
+  button: {
+    backgroundColor: 'rgb(237, 23, 3)',
+    width: '30%',
+    padding: 10,
+    borderRadius: 10,
+    margin: "auto",
+    alignContent: "center",
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  btnContainer: {
+    alignItems: "center",
+    backgroundColor: 'white'
   }
 });

@@ -2,6 +2,8 @@ import { useEffect, createContext, useContext, ReactNode, useState, BlockquoteHT
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { auth } from "../firebase/firebaseConfig.js"
 import { onAuthStateChanged } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore/lite";
+import { db } from "../firebase/firebaseConfig.js"
 
 
 type MyMoviesContextType = {
@@ -55,6 +57,18 @@ const MyMovieProvider = ({ children }: Props) => {
   const persistData = async () => {
     await AsyncStorage.setItem('moviesData', JSON.stringify(savedMovies));
   };
+
+  // const upload = async () => {
+  //   try {
+  //     auth
+  //     await addDoc(collection(db, "users", auth.currentUser?.uid, "bookmarked"), {
+  //       savedMovies
+  //     })
+  //   }
+  //   catch (err) {
+  //     alert(err)
+  //   }
+  // }
 
 
   const loadData = async () => {
